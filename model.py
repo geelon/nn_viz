@@ -18,13 +18,31 @@ class MLP:
         self.hidden_dims = hidden_dims
         self.num_classes = num_classes
 
+        # Computation graph defined in build_graph:
+        self.X = None  
+        self.y = None
+        self.layers = dict()
+        self.loss = None
+        self.train_op = None
 
-        self.X = tf.placeholder(tf.float32, shape=[None,input_dim], name='X')
-        self.y = tf.placeholder(tf.float32, shape=[None,num_classes], name='y')
-
+        # Restoration information
         self.ckpt_no = 0
         self.modified = False # bit to indicate when resaving needed
 
+        
+    def build_graph(self):
+        """
+        Constructs computation graph, loading into memory. In general, 
+        this should be called from Session._open_model(), as having multiple
+        models open in the same graph will cause scoping issues.
+        """
+        name = self.name
+        input_dim = self.input_dim
+        hidden_dims = self.hidden_dims
+        num_classes = self.num_classes
+        
+        self.X = tf.placeholder(tf.float32, shape=[None,input_dim], name=name+'X')
+        self.y = tf.placeholder(tf.float32, shape=[None,num_classes], name=name+'y')
         """
         Weights matrix variables named 'name/w_i'
         Bias variables named 'name/b_i'
@@ -43,7 +61,6 @@ class MLP:
         """
         Computation Graph
         """
-        self.layers = dict()
         layers = self.layers
         layers['layer_0'] = self.X
         with tf.variable_scope(name, reuse=tf.AUTO_REUSE):
@@ -89,7 +106,6 @@ class MLP:
     def train(self):
         return self.loss, self.train_op
         
-
 
             
             
@@ -284,14 +300,20 @@ class Session:
             sess.close()
 
         # Retrieve model
-        self.curr_model = self.learning_problem.load_model(name,hidden_dims)
+        m = self.learning_problem.load_model(name,hidden_dims)
+        m.build_graph()
+        self.curr_model = m
         
         # Begin session, restoring variables if necessary
         self.curr_session = tf.Session()
         ckpt_path = self.curr_model.ckpt_path
-        if os.path.isfile(ckpt_path) and os.stat(ckpt_path).st_size > 0:
-            print("Restoring variables")
+        if os.path.isfile(ckpt_path + ".index"):
+            print("Restoring variables for {}.".format(name))
             tf.train.Saver().restore(self.curr_session, ckpt_path)
+        else:
+            print("Initializing variables for {}.".format(name))
+            self.curr_session.run(tf.global_variables_initializer())
+            
 
 
     def _close_model(self):
@@ -306,6 +328,7 @@ class Session:
             saver = tf.train.Saver()
             saver.save(self.curr_session, ckpt_path)
             self.curr_model.ckpt_no += 1
+            self.curr_model.modified = False
 
         # Closes session
         self.curr_session.close()
@@ -315,7 +338,9 @@ class Session:
         self.learning_problem.pop_model(name)
         self.curr_model = None
         self.curr_session = None
-        
+
+        # Reset computation graph
+        tf.reset_default_graph()
         
     def __enter__(self):
         self.curr_session = tf.Session()
@@ -345,6 +370,7 @@ class Session:
         """
         if self.curr_model is not None:
             self.curr_model.ckpt_no += 1
+        self.curr_model.modified = True
         return self.curr_session.run(*args, **kwargs)
 
     def model_properties(self, verbose=False):
@@ -377,8 +403,29 @@ class Session:
             print("The keys are {}".format(feed_dict.keys()))
         return feed_dict
         
+
+    def quick_train(self, epochs=1000):
+        """
+        Run training on current model. Saves loss.
+        """
+        assert self.curr_model is not None, "Model not specified for training."
+
+        tf_objs = self.model_properties()
+        fetches = [tf_objs['loss'], tf_objs['train_op']]
+        feed_dict = self.model_feed_train()
+
+        loss_curve = pd.DataFrame(0.0, index=np.arange(epochs), columns=['loss'])
         
-                
+        for i in range(epochs):
+            loss_curve['loss'][i] , _ = self.run(fetches, feed_dict)
+
+        # Save loss curve to save_path/name/loss_curve_{ckpt_no}.csv
+        save_path = self.learning_problem.path
+        name = self.curr_model.name
+        ckpt_no = self.curr_model.ckpt_no
+        loss_curve.to_csv(save_path + name + '/loss_curve_{}'.format(ckpt_no))
+
+        return loss_curve
 
         
 def nn_stats(mlp, X, y, epochs=1000):
