@@ -19,8 +19,8 @@ class MLP:
         self.num_classes = num_classes
 
 
-        self.X = tf.placeholder(tf.float32, shape=[None,input_dim])
-        self.y = tf.placeholder(tf.float32, shape=[None,num_classes])
+        self.X = tf.placeholder(tf.float32, shape=[None,input_dim], name='X')
+        self.y = tf.placeholder(tf.float32, shape=[None,num_classes], name='y')
 
         self.ckpt_no = 0
         self.modified = False # bit to indicate when resaving needed
@@ -176,8 +176,15 @@ class LearningProblem:
         Loads model into memory. If model does not exists, creates it,
         in which case hidden_dims must not be None.
         """
+        if name in self.models:
+            m = self.models[name]
+            if not isinstance(m, str):
+                return m
         model_info = self._get_model_info(name, hidden_dims)
-        return self._create_model(name, model_info)
+        self.models[name] = self._create_model(name, model_info)
+        return self.models[name]
+        
+            
 
 
     def pop_model(self, name):
@@ -185,7 +192,6 @@ class LearningProblem:
         Pops model out of memory, replacing value in dictionary with
         path to saved path.
         """
-
         # Model exists
         assert name in self.models, "Model '{}' does not exist".format(name)
 
@@ -218,23 +224,46 @@ class LearningProblem:
         loss, train_op = m.train()
         return {'loss':loss, 'train_op':train_op}
 
-    def get_feed_dict(self, name):
+    def get_feed_names(self, name):
         """
-        Returns variables for feed_dict in model.
+        Returns uninitialized placeholders.
         """
         assert name in self.models, "Model '{}' does not exist".format(name)
 
         m = self.load_model(name)
-        X = m.X
-        y = m.y
-        return {'X':X, 'y':y}
+        return (m.X, m.y)
+
+    def get_feed_train(self, name):
+        """
+        Returns feed_dict for training.
+        """
+        assert name in self.models, "Model '{}' does not exist".format(name)
+
+        m = self.load_model(name)
+        return { m.X : self.train_x, m.y : self.train_y_one_shot }
+
+    def get_feed_test(self, name):
+        assert name in self.models, "Model '{}' does not exist".format(name)
+
+        m = self.load_model(name)
+        return { m.X : self.test_x, m.y : self.test_y_one_shot }
 
     def clean_up(self):
         """
         Removes all files and directories generated.
         """
         path = self.path
-        shutil.rmtree()
+        answer = input("Remove all subfiles of '{}'? [y/N]".format(path))
+        if answer is "y" or answer is "Y":
+            try:
+                shutil.rmtree(path)
+                print("Files removed.")
+            except OSError as e:
+                if e.errno != os.errno.ENOENT:
+                    raise
+        else:
+            print("Files not removed.")
+            
         
 
 
@@ -259,9 +288,9 @@ class Session:
         
         # Begin session, restoring variables if necessary
         self.curr_session = tf.Session()
-        if self.curr_model.ckpt_no > 0:
+        ckpt_path = self.curr_model.ckpt_path
+        if os.path.isfile(ckpt_path) and os.stat(ckpt_path).st_size > 0:
             print("Restoring variables")
-            ckpt_path = self.curr_model.ckpt_path
             tf.train.Saver().restore(self.curr_session, ckpt_path)
 
 
@@ -316,7 +345,7 @@ class Session:
         """
         if self.curr_model is not None:
             self.curr_model.ckpt_no += 1
-        return self.curr_session.run(args)
+        return self.curr_session.run(*args, **kwargs)
 
     def model_properties(self, verbose=False):
         """
@@ -334,7 +363,7 @@ class Session:
             print("The keys are {}".format(tf_objs.keys()))
         return tf_objs
 
-    def model_feed(self, verbose=False):
+    def model_feed_train(self, verbose=False):
         """
         Returns variables for feed dict in model.
         """
@@ -343,7 +372,7 @@ class Session:
             return
 
         name = self.curr_model.name
-        feed_dict = self.learning_problem.get_feed_dict(name)
+        feed_dict = self.learning_problem.get_feed_train(name)
         if verbose:
             print("The keys are {}".format(feed_dict.keys()))
         return feed_dict
