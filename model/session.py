@@ -129,8 +129,21 @@ class Session:
             print("The keys are {}".format(feed_dict.keys()))
         return feed_dict
         
+    def model_feed_test(self, verbose=False):
+        """
+        Returns variables for feed dict in model.
+        """
+        if self.curr_model is None:
+            print("No model loaded into session.")
+            return
 
-    def quick_train(self, epochs=1000):
+        name = self.curr_model.name
+        feed_dict = self.learning_problem.get_feed_test(name)
+        if verbose:
+            print("The keys are {}".format(feed_dict.keys()))
+        return feed_dict
+    
+    def quick_train(self, epochs=1000, validate=False):
         """
         Run training on current model. Saves loss.
         """
@@ -142,16 +155,33 @@ class Session:
 
         loss_curve = pd.DataFrame(0.0, index=np.arange(epochs), columns=['loss'])
         
+        if validate:
+            feed_dict_v = self.model_feed_test()
+            loss_curve_v = pd.DataFrame(0.0, index=np.arange(epochs),
+                                        columns=['loss_test'])
+
+        
         for i in range(epochs):
             loss_curve['loss'][i] , _ = self.run(fetches, feed_dict)
+            if validate:
+                loss_curve_v['loss_test'][i] = self.run(tf_objs['loss'],
+                                                        feed_dict=feed_dict_v)
 
         # Save loss curve to save_path/name/loss_curve_{ckpt_no}.csv
         save_path = self.learning_problem.path
         name = self.curr_model.name
         ckpt_no = self.curr_model.ckpt_no
-        loss_curve.to_csv(save_path + name + '/loss_curve_{}'.format(ckpt_no))
-
+        path = save_path + name
+        loss_curve.to_csv(path + '/loss_curve_{}'.format(ckpt_no))
+        if validate:
+            loss_curve_v.to_csv(path + '/test_loss_curve_{}'.format(ckpt_no))
+            return loss_curve, loss_curve_v
+        
         return loss_curve
+
+
+        
+        
 
         
 def nn_stats(mlp, X, y, epochs=1000):
