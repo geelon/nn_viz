@@ -1,3 +1,7 @@
+"""
+LearningProblem defines a problem context in which many models can be tested.
+"""
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf

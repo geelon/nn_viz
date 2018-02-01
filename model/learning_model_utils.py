@@ -1,3 +1,7 @@
+"""
+learning_model_utils provide support functions for learning_model,
+learning_problem, and session.
+"""
 import numpy as np
 import pandas as pd
 import json
