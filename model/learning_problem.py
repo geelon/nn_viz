@@ -4,6 +4,7 @@ import tensorflow as tf
 import os
 import shutil
 from .learning_model import MLP
+from .learning_model_utils import *
 
 class LearningProblem:
     def __init__(self, input_dim, num_classes, train, test, path="/tmp/nn_log/"):
