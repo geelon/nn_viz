@@ -24,5 +24,6 @@ dataset:
 <img src="output/validation_super_long.png" alt="super long train/test
 loss" />
 
-This was trained on a neural network with two hidden layers of
-dimension 2 followed by 4.
+The x-axis is the training epoch, while the y-axis is the training and
+testing loss. This was trained on a neural network with two hidden
+layers of dimension 2 followed by 4.
