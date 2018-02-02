@@ -18,16 +18,18 @@ feature. In other words, is there broad evidence for that feature?
 
 We could interpret dropout technique as asking this question: if I
 obscure some of the data, can the feature still be computed?
-Analogously, in real life, humans understand blurry pictures or deduce
-from partial information. 
+Analogously, in real life, humans are able to understand blurry
+pictures or deduce from partial information. 
 
 Perhaps the usual neural network (MLP) structure computes this
-question. Though we usually think the output of each neuron as the
-result of a computation, maybe it is closer to the confidence of that
-computation. Thus, each neuron represents a computation, but from the
-input data, the actual computation being run by the computer, usually
-something like σ(W*x + b), determines how certain the computation
-would be.
+question. Though we usually think of the output of each neuron as the
+*result* of a computation, maybe it is closer to the *confidence* of
+that computation. That is, each neuron *represents* a computation
+though it does not transmit that computation. Instead, the signal
+conveyed, something like σ(W*x + b), says how certain the would-be
+computation is. In some ways, the neural networks might thus be seen
+as a sort of complicated hash function at each layer, and indeed a
+hash function (i.e. classifier) overall.
 
 Furthermore, this gives the interpretation of regularization as
 preventing the model from becoming overly dependent on a small subset
