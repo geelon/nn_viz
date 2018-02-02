@@ -97,8 +97,13 @@ fractal while losing the relationship with test data.
 1. What qualities does this bifurcation point have?
 2. Can we verify that the weights are indeed increasing as time goes
 on, and that it is this that leads to the generalization error?
-3. Does regularization bound the test loss?
-
+3. Does regularization bound the test loss? Or, can bounds on the
+weights imply bounds on the generalization error?
+4. For example, we might say that the number of states increase
+exponentially as the weights increase. Can we prove a theoretical
+number of sample sizes required to bound the generalization error?
+(Plot the theoretical sample complexity? Plot the confidence intervals
+on the training loss, even if just the order of magnitude?) 
 
 ## Unstructured Questions List
 
@@ -110,3 +115,9 @@ they extracted the same information?
 can we obtain the remaining useful information?
 5. Does decreasing the batch size over time mimic increasing
 discernment? 
+
+## To Be Implemented
+
+- Visualizing the weights matrices over training.
+- Loosely, is the loss indeed a fractal? (Unclear what I mean
+  here). Visualize? 
