@@ -54,6 +54,51 @@ uncertainty, thus propagating uncertainty?
 boolean observables perspective, though perhaps relaxing to reals
 through using confidence, say 𝛿∈[0,1]?
 
+## Bifurcation of Loss: Train vs. Test
+
+Here are two loss curves comparisions:
+
+<img src="output/validation_long.png" alt="train/test loss" />
+
+<img src="output/validation_super_long.png" alt="super long train/test
+loss" />
+
+The x-axis is the training epoch, while the y-axis is the training and
+testing loss (note the difference in scales). This was trained on a
+neural network with two hidden layers: 2 dims followed by 4. Overall
+(as the iris dataset has 4-dimensional input and 3-dimensional
+output), the dimensions were: [4 input] -> [2 hidden] -> [4 hidden] ->
+[3 output]. Training follows from Adam optimizer, with no
+regularization. Learning rate is 1e-5.
+
+The second figure shows especially how the generalization error may be
+unbounded (technically, this is the cross entropy
+loss). Interestingly, in both cases, the train and test loss were very
+close until a 'bifurcation' point.
+
+One possible explanation for 'what changed' at the bifurcation point
+is that the model extracted most of the  generalizable information
+from the training set. Quantitatively, this might mean that the
+weights, W, began to grow, in the expression, W*x + b.
+
+In reality, multiplying by large numbers increases uncertainty;
+however, as there was no regularization (bounding the weights), the
+learning model assumes the inputs are infinitely precise.
+
+Possibly, the step-like loss of the second test curve suggests that
+the model was learning about the training set at a level of precision
+an order of magnitude greater than before. Very vaguely, it is as
+though the learning model was exploring the training data as though it
+were a fractal: sort of 'going deeper to the next level' of the
+fractal while losing the relationship with test data.
+
+### Experimentation
+
+1. What qualities does this bifurcation point have?
+2. Can we verify that the weights are indeed increasing as time goes
+on, and that it is this that leads to the generalization error?
+3. Does regularization bound the test loss?
+
 
 ## Unstructured Questions List
 
@@ -65,17 +110,3 @@ they extracted the same information?
 can we obtain the remaining useful information?
 5. Does decreasing the batch size over time mimic increasing
 discernment? 
-
-## Output
-
-For example, here are two outputs following training on the iris
-dataset:
-
-<img src="output/validation_long.png" alt="train/test loss" />
-
-<img src="output/validation_super_long.png" alt="super long train/test
-loss" />
-
-The x-axis is the training epoch, while the y-axis is the training and
-testing loss. This was trained on a neural network with two hidden
-layers of dimension 2 followed by 4.
