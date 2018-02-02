@@ -50,7 +50,9 @@ perhaps we could work with Boolean features instead (in which case
 we'd just need a ```confidence``` value).
 3. Can we recode real values into binary values that incorporate
 uncertainty, thus propagating uncertainty?
-
+4. Can this be put in a more theoretical framework from the lattice of
+boolean observables perspective, though perhaps relaxing to reals
+through using confidence, say 𝛿∈[0,1]?
 
 
 ## Unstructured Questions List
