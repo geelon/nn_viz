@@ -18,7 +18,7 @@
 ### Original, L1 Loss
 
 Here is the output for the original Iris dataset (no transformation
-into binary features); architecture is [12 input] -> [6 hidden] -> [4
+into binary features); architecture is [4 input] -> [6 hidden] -> [4
 hidden] -> [3 output].
 
 <img src="./output/weights_increasing_original/loss.png" alt="Train
@@ -36,11 +36,12 @@ loss"/>
 alt="Weights Evolution zoomed-in" />
 
 ### Transformed, L1 Loss
+
+Here is the output for the transformed dataset. Architecture is [12
+input] -> [6 hidden] -> [4 hidden] -> [3 output].
+
 <img src="./output/weights_increasing/loss.png" alt="Train vs. Test
 loss"/>
-
-Here is a l1-norm of the weights for the connections between each
-layer:
 
 <img src="./output/weights_increasing/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
