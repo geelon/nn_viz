@@ -31,3 +31,14 @@ alt="Weights Evolution"/>
 
 <img src="./output/weights_increasing_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
+
+And finally, here is the output, same as before, except with L2 norm.
+
+<img src="./output/l2_weights_original/loss.png" alt="Train vs. Test
+loss"/>
+
+<img src="./output/l2_weights_original/weights_evolution.png"
+alt="Weights Evolution"/>
+
+<img src="./output/l2_weights_originalweights_evolution_zoom.png"
+alt="Weights Evolution zoomed-in" />
