@@ -21,10 +21,10 @@ Here is the output for the original Iris dataset (no transformation
 into binary features); architecture is [4 input] -> [6 hidden] -> [4
 hidden] -> [3 output].
 
-<img src="./output/weights_increasing_original/loss.png" alt="Train
+<img src="./output/l1_weights_original/loss.png" alt="Train
 vs. Test loss"/>
 
-<img src="./output/weights_increasing_original/weights_evolution_zoom.png"
+<img src="./output/l1_weights_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
 ### Original, L2 Loss
@@ -50,9 +50,10 @@ alt="Weights Evolution zoomed-in" />
 
 A quick run of the L1 loss:
 
-<img src="./output/weights_increasing/loss.png" alt="Train vs. Test
+<img src="./output/l1_weights_transformed/loss.png" alt="Train vs. Test
 loss"/>
 
-<img src="./output/weights_increasing/weights_evolution_zoom.png"
+<img src="./output/l1_weights_transformed/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
+
 

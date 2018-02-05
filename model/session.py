@@ -216,7 +216,7 @@ class Session:
                 sys.stdout.write('\rCurrent Epoch: {}'.format(i))
                 sys.stdout.flush()
             _, loss_curve['loss'][i] = self.run(fetches, feed_dict)
-            weights_curve_l2.iloc[i] = self.run(weights[1], feed_dict)
+            weights_curve_l1.iloc[i] = self.run(weights[1], feed_dict)
             biases_curve['bias_l_inf'][i] = self.run(biases, feed_dict)
             
             if validate:
@@ -232,9 +232,9 @@ class Session:
         biases_curve.to_csv(path + '/biases_curve_{}'.format(ckpt_no))
         if validate:
             loss_curve_v.to_csv(path + '/test_loss_curve_{}'.format(ckpt_no))
-            return loss_curve, loss_curve_v, weights_curve_l2, biases_curve
+            return loss_curve, loss_curve_v, weights_curve_l1, biases_curve
         
-        return loss_curve, weights_curve_l2, biases_curve
+        return loss_curve, weights_curve_l1, biases_curve
         
         
 
