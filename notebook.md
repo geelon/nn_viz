@@ -18,3 +18,16 @@ alt="Weights Evolution"/>
 
 <img src="./output/weights_increasing/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
+
+Here is the output for the original Iris dataset (no transformation
+into binary features); architecture is [12 input] -> [6 hidden] -> [4
+hidden] -> [3 output].
+
+<img src="./output/weights_increasing_original/loss.png" alt="Train
+vs. Test loss"/>
+
+<img src="./output/weights_increasing_original/weights_evolution.png"
+alt="Weights Evolution"/>
+
+<img src="./output/weights_increasing_original/weights_evolution_zoom.png"
+alt="Weights Evolution zoomed-in" />
