@@ -40,5 +40,5 @@ loss"/>
 <img src="./output/l2_weights_original/weights_evolution.png"
 alt="Weights Evolution"/>
 
-<img src="./output/l2_weights_originalweights_evolution_zoom.png"
+<img src="./output/l2_weights_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
