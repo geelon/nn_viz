@@ -140,6 +140,17 @@ class LearningProblem:
         loss, train_op = m.train()
         return {'loss':loss, 'train_op':train_op}
 
+    def get_weights_dict(self, name):
+        """
+        Returns: weights, biases
+        Each are a dictionary: @weights has l_1, l_2, and l_inf norms of weights 
+        and @biases has the l_inf norm of biases.
+        """
+        assert name in self.models, "Model '{}' does not exist".format(name)
+
+        m = self.load_model(name)
+        return m.get_weights()
+
     def get_feed_names(self, name):
         """
         Returns uninitialized placeholders.
@@ -169,6 +180,7 @@ class LearningProblem:
         Removes all files and directories generated.
         """
         path = self.path
+        self.models = dict()
         answer = input("Remove all subfiles of '{}'? [y/N]".format(path))
         if answer is "y" or answer is "Y":
             try:

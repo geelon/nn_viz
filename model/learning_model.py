@@ -84,29 +84,45 @@ class MLP:
 
             output = layers['layer_{}'.format(self.num_layers)]
             loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.y,
-                                                           logits=output)
+                                                              logits=output)
             loss = tf.reduce_mean(loss)
             train_op = optimizer.minimize(loss)
 
         self.loss = loss
         self.train_op = train_op
 
-        """
-        Visualizing
 
-        with tf.variable_scope(name, reuse=True):
-            with tf.Session() as sess:
-                sess.run(tf.global_variables_initializer())
-                writer = tf.summary.FileWriter("test.log", sess.graph)
-                
-                sess.run(layers['layer_{}'.format(self.num_layers)],
-                         feed_dict={self.X: [[2,2],[1,2]]})
-                
-                writer.close()
         """
+        Weights Analysis
+        """
+        with tf.variable_scope(name, reuse=tf.AUTO_REUSE):
+            self.weights_l_1 = dict()
+            self.weights_l_2 = dict()
+            self.weights_l_inf = dict() 
+            self.biases = dict()
+            for i in range(self.num_layers):
+                w_ = "w_{}".format(i)
+                b_ = "b_{}".format(i)
+                w = tf.get_variable(name=w_)
+                self.weights_l_1[w_] = tf.norm(w,1)
+                self.weights_l_2[w_] = tf.norm(w,2)
+                self.weights_l_inf[w_] = tf.norm(w,np.inf)
+                b = tf.get_variable(name=b_)
+                self.biases = tf.norm(b,np.inf)
+                
+                
+
 
     def train(self):
         return self.loss, self.train_op
+
+    def get_weights(self):
+        weights = [self.weights_l_1,
+                   self.weights_l_2,
+                   self.weights_l_inf]
+        biases = self.biases
+        
+        return weights, biases
         
 
             

@@ -4,10 +4,13 @@ Session enables quickly switching and saving models.
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import sys
 import os
 import shutil
+from .session_utils import empty_df
 from .learning_model import MLP
 from .learning_problem import LearningProblem
+
 
 
         
@@ -179,24 +182,59 @@ class Session:
         
         return loss_curve
 
+    def all_stats(self, epochs=1000, validate=False, verbose=True):
+        """
+        Run training on current model. Saves loss and weights.
+        """
+        assert self.curr_model is not None, "Model is not specified for training."
+        name = self.curr_model.name
+        num_layers = self.curr_model.num_layers
 
+        tf_objs = self.model_properties()
+        train_op = tf_objs['train_op']
+        loss = tf_objs['loss']
+        weights, biases = self.learning_problem.get_weights_dict(name)
+        
+        fetches = [train_op, loss]
+        feed_dict = self.model_feed_train()
+
+        loss_curve = empty_df(epochs, columns=['loss'])
+        weights_columns = ['w_{}'.format(i) for i in range(num_layers)]
+        weights_curve_l1 = empty_df(epochs, columns=weights_columns)
+        weights_curve_l2 = empty_df(epochs, columns=weights_columns)
+        weights_curve_l_inf = empty_df(epochs, columns=weights_columns)
+        
+        biases_curve = empty_df(epochs, columns=['bias_l_inf'])
+
+        
+        if validate:
+            feed_dict_v = self.model_feed_test()
+            loss_curve_v = empty_df(epochs, columns=['loss_test'])
+
+        for i in range(epochs):
+            if verbose:
+                sys.stdout.write('\rCurrent Epoch: {}'.format(i))
+                sys.stdout.flush()
+            _, loss_curve['loss'][i] = self.run(fetches, feed_dict)
+            weights_curve_l1.iloc[i] = self.run(weights[0], feed_dict)
+            biases_curve['bias_l_inf'][i] = self.run(biases, feed_dict)
+            
+            if validate:
+                loss_curve_v['loss_test'][i] = self.run(tf_objs['loss'],
+                                                        feed_dict=feed_dict_v)
+        # Save loss curve to save_path/name/loss_curve_{ckpt_no}.csv
+        save_path = self.learning_problem.path
+        name = self.curr_model.name
+        ckpt_no = self.curr_model.ckpt_no
+        path = save_path + name
+        loss_curve.to_csv(path + '/loss_curve_{}'.format(ckpt_no))
+        weights_curve_l1.to_csv(path + '/weights_curve_l1_{}'.format(ckpt_no))
+        biases_curve.to_csv(path + '/biases_curve_{}'.format(ckpt_no))
+        if validate:
+            loss_curve_v.to_csv(path + '/test_loss_curve_{}'.format(ckpt_no))
+            return loss_curve, loss_curve_v, weights_curve_l1, biases_curve
+        
+        return loss_curve, weights_curve_l1, biases_curve
         
         
 
-        
-def nn_stats(mlp, X, y, epochs=1000):
-    """
-    
-    """
-    loss_curve = pd.DataFrame(0.0, index=np.arange(epochs), columns=['loss'])
-    feed_dict = {mlp.X : X, mlp.y : y}
-
-    with tf.variable_scope(mlp.name, reuse=True):
-        init = tf.global_variables_initializer()
-        with tf.Session() as sess:
-            sess.run(init)
-            for i in range(epochs):
-                loss, train = mlp.train()
-                lo, _ = sess.run([loss,train], feed_dict=feed_dict)
-                loss_curve['loss'][i] = lo
-    return loss_curve

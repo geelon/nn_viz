@@ -1,0 +1,5 @@
+Iris dataset, transformed into binary values, 3 bins per feature (12 total features)
+Model architecture: 12 input -> 6 hidden -> 4 hidden -> 3 output
+L1 norm of weights visualized
+Adam Optimizer
+No regularization
