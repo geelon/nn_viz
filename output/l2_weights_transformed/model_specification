@@ -1,0 +1,5 @@
+Iris dataset, transformed
+Model architecture: 12 input -> 6 hidden -> 4 hidden -> 3 output
+L2 norm of weights visualized
+Adam Optimizer
+No regularization

@@ -35,13 +35,24 @@ loss"/>
 <img src="./output/l2_weights_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
-### Transformed, L1 Loss
+### Transformed, L2 Loss
 
 Here is the output for the transformed dataset. Architecture is [12
 input] -> [6 hidden] -> [4 hidden] -> [3 output].
+
+<img src="./output/l2_weights_transformed/loss.png" alt="Train vs. Test
+loss"/>
+
+<img src="./output/l2_weights_transformed/weights_evolution_zoom.png"
+alt="Weights Evolution zoomed-in" />
+
+### Transformed, L1 Loss
+
+A quick run of the L1 loss:
 
 <img src="./output/weights_increasing/loss.png" alt="Train vs. Test
 loss"/>
 
 <img src="./output/weights_increasing/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
+
