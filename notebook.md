@@ -15,7 +15,7 @@
 - Model architecture: [n input] -> [6 hidden] -> [4 hidden] -> [3
   output], where n = 4 for the original, and n = 12 for transformed.
 
-### Original, L1 Loss
+### Original, L1-norm of weights
 
 Here is the output for the original Iris dataset (no transformation
 into binary features); architecture is [4 input] -> [6 hidden] -> [4
@@ -27,7 +27,7 @@ vs. Test loss"/>
 <img src="./output/l1_weights_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
-### Original, L2 Loss
+### Original, L2-norm of weights
 
 <img src="./output/l2_weights_original/loss.png" alt="Train vs. Test
 loss"/>
@@ -35,10 +35,18 @@ loss"/>
 <img src="./output/l2_weights_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
-### Transformed, L2 Loss
+### Transformed, L1-norm of weights
 
 Here is the output for the transformed dataset. Architecture is [12
 input] -> [6 hidden] -> [4 hidden] -> [3 output].
+
+<img src="./output/l1_weights_transformed/loss.png" alt="Train vs. Test
+loss"/>
+
+<img src="./output/l1_weights_transformed/weights_evolution_zoom.png"
+alt="Weights Evolution zoomed-in" />
+
+### Transformed, L2-norm of weights
 
 <img src="./output/l2_weights_transformed/loss.png" alt="Train vs. Test
 loss"/>
@@ -46,14 +54,5 @@ loss"/>
 <img src="./output/l2_weights_transformed/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
-### Transformed, L1 Loss
-
-A quick run of the L1 loss:
-
-<img src="./output/l1_weights_transformed/loss.png" alt="Train vs. Test
-loss"/>
-
-<img src="./output/l1_weights_transformed/weights_evolution_zoom.png"
-alt="Weights Evolution zoomed-in" />
 
 
