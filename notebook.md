@@ -13,9 +13,6 @@ loss"/>
 Here is a l1-norm of the weights for the connections between each
 layer:
 
-<img src="./output/weights_increasing/weights_evolution.png"
-alt="Weights Evolution"/>
-
 <img src="./output/weights_increasing/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
@@ -26,9 +23,6 @@ hidden] -> [3 output].
 <img src="./output/weights_increasing_original/loss.png" alt="Train
 vs. Test loss"/>
 
-<img src="./output/weights_increasing_original/weights_evolution.png"
-alt="Weights Evolution"/>
-
 <img src="./output/weights_increasing_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
@@ -36,9 +30,6 @@ And finally, here is the output, same as before, except with L2 norm.
 
 <img src="./output/l2_weights_original/loss.png" alt="Train vs. Test
 loss"/>
-
-<img src="./output/l2_weights_original/weights_evolution.png"
-alt="Weights Evolution"/>
 
 <img src="./output/l2_weights_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
