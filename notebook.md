@@ -2,19 +2,20 @@
 
 ## Increasing Weights
 
-Here is training run on the Iris dataset (transformed into confidence
-values on binary features), with no regularization, Adam optimizer,
-and with model architecture [12 input] -> [6 hidden] -> [4 hidden] ->
-[3 output]. Here is the loss:
+**Hypothesis**: generalization error (in unregularizaed MLPs) is in
+ part a result of increasing weights; as the size of the weights
+ increases, multiplying by these weights expands the discernability of
+ input data (i.e. 'increases the precision' of the input). 
 
-<img src="./output/weights_increasing/loss.png" alt="Train vs. Test
-loss"/>
+**Simple Experimental Setup:**
 
-Here is a l1-norm of the weights for the connections between each
-layer:
+- Iris dataset, (a) original, (b) transformed into confidence values
+  on binary features.
+- MLP, no regularization, Adam optimization
+- Model architecture: [n input] -> [6 hidden] -> [4 hidden] -> [3
+  output], where n = 4 for the original, and n = 12 for transformed.
 
-<img src="./output/weights_increasing/weights_evolution_zoom.png"
-alt="Weights Evolution zoomed-in" />
+### Original, L1 Loss
 
 Here is the output for the original Iris dataset (no transformation
 into binary features); architecture is [12 input] -> [6 hidden] -> [4
@@ -26,10 +27,20 @@ vs. Test loss"/>
 <img src="./output/weights_increasing_original/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
-And finally, here is the output, same as before, except with L2 norm.
+### Original, L2 Loss
 
 <img src="./output/l2_weights_original/loss.png" alt="Train vs. Test
 loss"/>
 
 <img src="./output/l2_weights_original/weights_evolution_zoom.png"
+alt="Weights Evolution zoomed-in" />
+
+### Transformed, L1 Loss
+<img src="./output/weights_increasing/loss.png" alt="Train vs. Test
+loss"/>
+
+Here is a l1-norm of the weights for the connections between each
+layer:
+
+<img src="./output/weights_increasing/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
