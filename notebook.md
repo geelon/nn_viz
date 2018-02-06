@@ -54,5 +54,17 @@ loss"/>
 <img src="./output/l2_weights_transformed/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
+## Generalization Error vs. Weights
 
+<img
+src="./output/generalization_v_weights/generalization_original_l1.png"
+alt="Original l1 generalization error" />
+
+<img
+src="./output/generalization_v_weights/generalization_transformed_l1.png"
+alt="Original l1 generalization error" />
+
+<img
+src="./output/generalization_v_weights/generalization_transformed_l2.png"
+alt="Original l1 generalization error" />
 
