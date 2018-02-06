@@ -1,4 +1,28 @@
 # Experiment Notes
+## Generalization Error vs. Weights
+
+Here are plots comparing generalization error, |test_error -
+train_error|, and the weights. Here, the generalization error is on a
+logarithmic scale while the weights are on a linear scale.*
+
+<img
+src="./output/generalization_v_weights/generalization_original_l1.png"
+alt="Original l1 generalization error" />
+
+<img
+src="./output/generalization_v_weights/generalization_transformed_l1.png"
+alt="Original l1 generalization error" />
+
+<img
+src="./output/generalization_v_weights/generalization_transformed_l2.png"
+alt="Original l1 generalization error" />
+
+*Specifically, we applied a transformation: exp(weights/8)/2700 to get
+ the scales to be comparable.
+
+**Data is the same as below; unfortunately, I did not properly save
+  the *original l2* data. 
+
 
 ## Increasing Weights
 
@@ -54,25 +78,3 @@ loss"/>
 <img src="./output/l2_weights_transformed/weights_evolution_zoom.png"
 alt="Weights Evolution zoomed-in" />
 
-## Generalization Error vs. Weights
-
-Here are plots comparing generalization error, |test_error -
-train_error|, and the weights. Here, the generalization error is on a
-logarithmic scale while the weights are on a linear scale.*
-
-<img
-src="./output/generalization_v_weights/generalization_original_l1.png"
-alt="Original l1 generalization error" />
-
-<img
-src="./output/generalization_v_weights/generalization_transformed_l1.png"
-alt="Original l1 generalization error" />
-
-<img
-src="./output/generalization_v_weights/generalization_transformed_l2.png"
-alt="Original l1 generalization error" />
-
-*Specifically, we applied a transformation: exp(weights/8)/2700 to get
- the scales to be comparable.
-
-**Unfortunately, I did not properly save the *original l2* data.
